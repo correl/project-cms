@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+	<title>correl.phoenixinquis.net{if $active_project}: {$active_project.project_name}{/if}</title>
+	<subtitle>Projects and coding adventures</subtitle>
+	<link href="{link external=true resource=""}"/>
+	{*<logo>{SITE_URL}images/pinlogo-crescent-100-wide.png</logo>*}
+	<updated>{$smarty.now|date_format:"%Y-%m-%dT%H:%M:%S%z"}</updated>
+	<author>
+		<name>Correl Roush</name>
+		<email>correl@gmail.com</email>
+	</author>
+	<id>{link external=true resource=""}</id>
+	{foreach from=$posts item=post}
+		<entry>
+			<title>{if $post.project_id}{$post.project_name} :: {/if}{$post.post_title}</title>
+			<link href="{link external=true type=post project=$post.project_short_name resource=$post.post_id}"/>
+			<id>{link external=true type=post project=$post.project_short_name resource=$post.post_id}</id>
+			<updated>{$post.post_date|date_format:"%Y-%m-%dT%H:%M:%S%z"}</updated>
+			<content type="html"><![CDATA[{$post.text|replace:"<code":"<pre"|replace:"</code":"</pre"}]]></content>
+		</entry>
+	{/foreach}
+	{*
+	<!-- BEGIN topicrow -->
+	<entry>
+		<title>{topicrow.TOPIC_TITLE}</title>
+		<link href="{topicrow.TOPIC_URL}"/>
+		<id>{topicrow.TOPIC_URL}</id>
+		<updated>{topicrow.TOPIC_TIME_ISO8601}</updated>
+		<content type="html">
+			<![CDATA[
+			<p>
+			{L_AUTHOR}: {topicrow.POST_AUTHOR}
+			</p>
+			{topicrow.POST_TEXT}
+			]]>
+		</content>
+	</entry>
+	<!-- END topicrow -->
+	*}
+</feed>

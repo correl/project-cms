@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+	<channel>
+		<title>correl.phoenixinquis.net{if $active_project}: {$active_project.project_name}{/if}</title>
+		<link>{link external=true resource=""}</link>
+		<language>en-us</language>
+		<description>Projects and coding adventures</description>
+		<webMaster>correl@gmail.com</webMaster>
+		<pubDate>{$smarty.now|date_format:"%a, %d %b %Y %H:%M:%S %z"}</pubDate>
+		<lastBuildDate>{$smarty.now|date_format:"%a, %d %b %Y %H:%M:%S %z"}</lastBuildDate>
+		<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+		<generator>Phoenix Inquisitor RSS</generator>
+		{*
+		<image>
+			<title>{SITENAME}</title>
+			<url>{SITE_URL}images/pinlogo-crescent-100.png</url>
+			<width>91</width>
+			<height>100</height>
+			<description>(c) 2001 Correl J. Roush</description>
+			<link>{SITE_URL}</link>
+		</image>
+		*}
+		{foreach from=$posts item=post}
+			<item>
+				<title>{if $post.project_id}{$post.project_name} :: {/if}{$post.post_title}</title>
+				<link>{link external=true type=post project=$post.project_short_name resource=$post.post_id}</link>
+				<description><![CDATA[{$post.text|replace:"<code":"<pre"|replace:"</code":"</pre"}]]></description>
+				<pubDate>{$post.post_date|date_format:"%a, %d %b %Y %H:%M:%S %z"}</pubDate>
+				<guid>{$post.post_id}</guid>
+			</item>
+		{/foreach}
+	</channel>
+</rss>

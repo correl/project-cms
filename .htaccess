@@ -1,0 +1,26 @@
+RewriteEngine on
+RewriteBase /~correlr/projects/
+
+# Redirect posts
+RewriteRule ^(\d+)$ index.php?post=$1
+# Redirect feeds
+RewriteRule ^feeds/(.+)$ feed.php?mode=$1
+# Redirect projects
+RewriteRule ^project/([^\/]+)$ project/$1/ [R]
+RewriteRule ^project/([^\/]+)/feeds/(.*)$ feed.php?project=$1&mode=$2
+RewriteRule ^project/([^\/]+)/$ index.php?project=$1
+RewriteRule ^project/([^\/]+)/(\d+)$ index.php?project=$1&post=$2
+RewriteRule ^project/([^\/]+)/([^\/]+)$ index.php?project=$1&page=$2
+# Invalid project queries go back to the index
+RewriteRule ^project/ index.php [R]
+
+# Redirect pages
+RewriteRule ^pages/([^\/]+)$ index.php?page=$1
+# Invalid page queries go back to the index
+RewriteRule ^pages/ index.php [R]
+
+# Redirect resource subdirectories
+#RewriteRule ^.*?/templates/(.*)$ templates/$1 [R]
+#RewriteRule ^.*?/js/(.*)$ js/$1 [R]
+
+ErrorDocument 404 /~correlr/projects/404.php
