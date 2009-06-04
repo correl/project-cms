@@ -14,6 +14,7 @@ set_error_handler(create_function('$a, $b, $c, $d', 'throw new ErrorException($b
 
 require_once('includes/functions.php');
 require_once('includes/templates.php');
+require_once('includes/database.php');
 
 if (is_file(APP_PATH . 'config.php') && is_readable(APP_PATH . 'config.php')) {
 	include_once(APP_PATH . 'config.php');
@@ -21,10 +22,6 @@ if (is_file(APP_PATH . 'config.php') && is_readable(APP_PATH . 'config.php')) {
 	die('Configuration does not exist or is not readable');
 }
 
-$mysql = mysql_pconnect($config['dsn']['hostspec'],
-	$config['dsn']['username'],
-	$config['dsn']['password']);
-mysql_select_db($config['dsn']['database'], $mysql);
-
+$db = new Database($config['dsn']);
 $template = new Projects_Smarty();
 ?>
