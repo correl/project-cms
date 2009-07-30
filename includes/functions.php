@@ -217,7 +217,17 @@ function save_post($options) {
 	if ($db->in_transaction) $db->commit();
 	
 	// Clear out the cache so the updated material is immediately visible
-	$template->clear_all_cache();
+	try {
+		$template->clear_all_cache();
+	} catch (Exception $e) {
+		/*
+			It's possible that clearing the cache will fail. Particularly in
+			development, since the .svn directories may be there, and they won't
+			take kindly to being removed. Log and continue, failure here is not
+			critical, as the cache will eventually expire anyway.
+		*/
+		Error::log_exception($e);
+	}
 	
 	return $page_id;
 }
