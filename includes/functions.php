@@ -112,7 +112,7 @@ function get_projects($project_id = false) {
 	return $projects;
 }
 function save_post($options) {
-	global $db, $auth;
+	global $db, $auth, $template;
 	
 	if (!isset($options['post_id'])
 		|| !isset($options['user_id'])
