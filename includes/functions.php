@@ -215,6 +215,10 @@ function save_post($options) {
 		return false;
 	}
 	if ($db->in_transaction) $db->commit();
+	
+	// Clear out the cache so the updated material is immediately visible
+	$template->clear_all_cache();
+	
 	return $page_id;
 }
 function is_vector( &$array ) {
