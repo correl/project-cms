@@ -107,7 +107,8 @@ div.date {
 	font-weight: bold;
 	padding: 10px;
 }
-div.newsitem {
+div.newsitem,
+div.box {
 	background: #F0F0F0 url(img/bg_newsitem.png) repeat-x;
 	border: 1px solid #EEE;
 	border-color: #EEE #EEE #DDD #EEE;

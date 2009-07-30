@@ -1,0 +1,45 @@
+.admin-links a {
+	display: block;
+	text-align: center;
+	padding: .5em;
+	margin: .5em;
+	text-decoration: none;
+}
+.admin-links h2 {
+	text-align: center;
+	border-bottom: 1px solid black;
+}
+
+form {
+	text-align: center;
+}
+form fieldset {
+	border: none;
+}
+form dt {
+	float: left;
+	text-align: right;
+	width: 28%;
+	clear: left;
+}
+form dd {
+	text-align: left;
+	margin-bottom: .5em;
+	margin-left: 30%;
+	min-height: 1em;
+	width: 70%;
+}
+dd input[type="text"], dd input[type="password"], dd select {
+	width: 70%;
+}
+form input[type="submit"], form input[type="button"] {
+	width: 30%;
+}
+input, select, textarea {
+	padding: 2px;
+}
+textarea {
+	width: 95%;
+	height: 20em;
+}
+

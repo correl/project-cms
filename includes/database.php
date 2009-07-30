@@ -13,7 +13,6 @@ class Database {
 	public function connection() {
 		if (!$this->_mdb2) {
 			$this->_mdb2 =& MDB2::factory($this->_dsn);
-			if (PEAR::isError($this->_mdb2)) die($this->_mdb2->getMessage());
 			$this->_mdb2->loadModule('Extended', null, false);
 			$this->_mdb2->setFetchMode(MDB2_FETCHMODE_ASSOC);
 		}
@@ -41,6 +40,15 @@ class Database {
 		}
 		if (!method_exists($conn, $name)) return PEAR::raiseError("Method '$name' does not exist in class " . get_class($conn));
 		return call_user_func_array(array($conn, $name), $arguments);
+	}
+	public function __get($name) {
+		// Pass unknown members through to the MDB2 object if they exist, otherwise trigger an error
+		$conn =& $this->connection();
+		if (!is_object($conn)) {
+			return PEAR::raiseError('Database connection failure');
+		}
+		if (!property_exists($conn, $name)) return PEAR::raiseError("Property '$name' does not exist in class " . get_class($conn));
+		return $conn->$name;
 	}
 }
 ?>
