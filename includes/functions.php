@@ -126,6 +126,10 @@ function save_post($options) {
 		throw new Exception('Missing required fields attempting to save post data; Received: ' . var_export($options));
 	}
 	
+	if (!$auth->has_perm('post_edit')) {
+		throw new AuthException("Unauthorized attempt to modify post by user: " . var_export($auth->user()));
+	}
+	
 	$post_id = intval($options['post_id']);
 	$user_id = intval($options['user_id']);
 	$project_id = intval($options['project_id']);

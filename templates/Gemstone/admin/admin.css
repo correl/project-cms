@@ -8,6 +8,7 @@
 .admin-links h2 {
 	text-align: center;
 	border-bottom: 1px solid black;
+	margin-bottom: 1em;
 }
 
 form {

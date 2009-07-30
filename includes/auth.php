@@ -21,6 +21,12 @@ class Auth {
 		$sql = "SELECT * FROM {$db->table('users')} ORDER BY active DESC, id";
 		return $db->queryAll($sql);
 	}
+	public static function get_user_names($include_inactive = false) {
+		global $db;
+		$where = !$include_inactive ? 'WHERE active = 1' : '';
+		$sql = "SELECT id, login FROM {$db->table('users')} $where ORDER BY name DESC";
+		return $db->extended->getAssoc($sql);
+	}
 	public static function get_groups() {
 		global $db;
 		$sql = "SELECT * FROM {$db->table('groups')} ORDER BY name";
