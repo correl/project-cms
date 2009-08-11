@@ -24,6 +24,9 @@ postEditor.prototype = {
 		var form = $(this.element.find("form"));
 		if (form.length == 0) return;
 		form = $(form[0]);
+		for (var i = 0; i < form.find("textarea[name]").length; i++) {
+			jQuery.wymeditors(i).update();
+		}
 		var elements = form.find("input, select, textarea");
 		var fields = new Object;
 		for (var i = 0; i < elements.length; i++) {
