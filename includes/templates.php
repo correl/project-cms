@@ -8,7 +8,7 @@ class Projects_Smarty extends Smarty {
 		$this->compile_dir = APP_PATH . 'templates_c';
 		$this->config_dir = APP_PATH . 'configs';
 		$this->cache_dir = APP_PATH . 'cache';
-		$this->caching = 1;
+		$this->caching = defined('ADMIN') && true === ADMIN ? 0 : 1;
 		if (true === DEBUG) {
 			$this->force_compile = true;
 			$this->debugging = true;

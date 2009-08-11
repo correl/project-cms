@@ -1,5 +1,4 @@
-{include file="Gemstone/admin/header.tpl"}
-<div class="box">
+{* include file="Gemstone/admin/header.tpl" *}
 	<h1>
 		{if $page}
 			{if $post.post_id}Editing page{else}New page{/if}
@@ -59,7 +58,11 @@
 				</dd>
 			</dl>
 		</fieldset>
+		</script>
+		{if !empty($errors)}
+			{include file="Gemstone/admin/error.tpl" error="There were problems with the submitted data. Please correct any errors and try again."}
+		{/if}
+		{*
 		<input type="submit" name="save" value="Save changes" /><input type="submit" name="cancel" value="Cancel" />
+		*}
 	</form>
-</div>
-{include file="Gemstone/admin/footer.tpl"}

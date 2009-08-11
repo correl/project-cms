@@ -43,4 +43,6 @@ textarea {
 	width: 95%;
 	height: 20em;
 }
-
+form li {
+	list-style-image: none;
+}

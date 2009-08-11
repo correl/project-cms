@@ -2,6 +2,8 @@
 define('ADMIN', true);
 require_once('../common.php');
 
+$project_id = isset($_REQUEST['project']) ? intval($_REQUEST['project']) : 0;
+
 if (isset($_POST['save'])) {
 	try {
 		if (
@@ -38,11 +40,6 @@ if (isset($_POST['save'])) {
 		if (empty($errors)) {
 			$post_id = save_post($post_options);
 			if ($post_id) {
-				if ($post_options['project_id'] > 0) {
-					header("Location: projects.php?project={$post_options['project_id']}");
-				} else {
-					header('Location: pages.php');
-				}
 				exit;
 			}
 		}
@@ -58,25 +55,15 @@ if (isset($_POST['save'])) {
 	} catch (Exception $e) {
 		Error::log_exception($e);
 	}
-}
-
-$project_id = isset($_REQUEST['project']) ? intval($_REQUEST['project']) : 0;
-
-if (isset($_REQUEST['cancel'])) {
-	if ($project_id > 0) {
-		header("Location: projects.php?project=$project_id");
-	} else {
-		header('Location: pages.php');
-	}
+} elseif (isset($_REQUEST['cancel'])) {
 	exit;
 } elseif (isset($_REQUEST['page'])) {
 	$page = intval($_REQUEST['page']);
-	$posts = get_pages(array('page' => $page));
+	$posts = $page > 0 ? get_pages(array('page' => $page)) : array();
 } elseif (isset($_REQUEST['post'])) {
 	$post = intval($_REQUEST['post']);
-	$posts = get_posts(array('post' => $post));
+	$posts = $post > 0 ? get_posts(array('post' => $post)) : array();
 } else {
-	header('Location: index.php');
 	exit;
 }
 

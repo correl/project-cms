@@ -2,16 +2,14 @@
 define('ADMIN', true);
 require_once('../common.php');
 
-if (!isset($_REQUEST['project'])) {
+$project_id = isset($_REQUEST['project']) ? intval($_REQUEST['project']) : 0;
+
+if (!$project_id) {
 	$template->assign(array(
 		'projects' => get_projects()
 	));
 	$template->display('Gemstone/admin/projects.tpl');
 	exit;
-}
-$project_id = intval($_REQUEST['project']);
-if (!$project_id) {
-	
 } else {
 	$projects = get_projects($project_id);
 	if (empty($projects)) {
