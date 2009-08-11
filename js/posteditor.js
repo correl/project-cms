@@ -5,6 +5,7 @@ function postEditor() {
 			"modal": true,
 			"title": "Edit",
 			"width": "80%",
+			"height": jQuery(window).height() * .98,
 			"buttons": {
 				"Save": function() { editor.save(); },
 				"Cancel": function() { $(this).dialog("close"); }
