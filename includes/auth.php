@@ -1,19 +1,19 @@
 <?php
 class Auth {
-	private $acl;
-	private $user;
-	
+	private $_acl;
+	private $_user;
+
 	private static $permissions = false;
-	
+
 	public function __construct() {
 		$id = isset($_SESSION['userid']) && is_numeric($_SESSION['userid']) ? $_SESSION['userid'] : false;
-		$this->user = $id ? Auth::get_user($id) : false;
+		$this->_user = $id ? Auth::get_user($id) : false;
 	}
 	public function user($key = false) {
 		if ($key) {
-			return is_array($this->user) && array_key_exists($key, $this->user) ? $this->user[$key] : false;
+			return is_array($this->_user) && array_key_exists($key, $this->_user) ? $this->_user[$key] : false;
 		} else {
-			return $this->user;
+			return $this->_user;
 		}
 	}
 	public static function get_users() {
@@ -52,7 +52,7 @@ class Auth {
 		return $user;
 	}
 	public function proxy_users($user_id = false) {
-		$user_id = (false === $user_id && $this->user ? $this->user['id'] : $user_id);
+		$user_id = (false === $user_id && $this->_user ? $this->_user['id'] : $user_id);
 		if (!is_numeric($user_id)) return false;
 		if ($this->has_perm('proxy_all', $user_id)) {
 			$users = Auth::get_users();
@@ -71,19 +71,19 @@ class Auth {
 	}
 	public function has_perm($permission, $user_id = false) {
 		$cache = ($user_id === false);
-		$user_id = (false === $user_id && $this->user ? $this->user['id'] : $user_id);
+		$user_id = (false === $user_id && $this->_user ? $this->_user['id'] : $user_id);
 		if (!is_numeric($user_id)) return false;
 		if ($cache) {
-			if (empty($this->acl)) $this->acl = Auth::get_user_permissions($user_id);
-			$acl = $this->acl;
+			if (empty($this->_acl)) $this->_acl = Auth::get_user_permissions($user_id);
+			$acl = $this->_acl;
 		} else {
 			$acl = Auth::get_user_permissions($user_id);
 		}
-		return array_key_exists($permission, $this->acl) ? ('YES' == $this->acl[$permission]) : false;
+		return array_key_exists($permission, $this->_acl) ? ('YES' == $this->_acl[$permission]) : false;
 	}
 	public static function get_user_permissions($user_id) {
 		global $db;
-		
+
 		// Get the full list of permissions from the database
 		if (!is_array(Auth::$permissions)) {
 			$sql = "SELECT name FROM {$db->table('permissions')} ORDER BY name";
@@ -95,7 +95,7 @@ class Auth {
 			return $permissions;
 		}
 		foreach (Auth::$permissions as $perm) $permissions[$perm] = 'NO';
-		
+
 		$sql =	"SELECT
 					p.name permission,
 					acl.access
@@ -163,7 +163,7 @@ class Auth {
 		$sql = "SELECT `id`, `name`, `email` FROM {$db->table('users')} WHERE `id` = $user";
 		$user = $db->queryRow($sql);
 		if (!$user['email']) return false;
-		
+
 		$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
 		$password = '';
 		while (strlen($password) < 8) {
@@ -173,7 +173,7 @@ class Auth {
 		$pw = $db->quote(sha1($password));
 		$sql = "UPDATE {$db->table('users')} SET `password` = $pw, `force_pass_change` = 1, `active` = 1 WHERE `id` = {$user['id']}";
 		$db->query($sql);
-		
+
 		$url = "http://{$_SERVER['HTTP_HOST']}" . dirname($_SERVER['REQUEST_URI']) . "/";
 		$subject = sprintf($subject, $user['name']);
 		$message = sprintf($message, $user['name'], $url, $password);
@@ -189,7 +189,7 @@ class Auth {
 		return true;
 	}
 	public function ok() {
-		return isset($_SESSION['userid']) && is_numeric($_SESSION['userid']) && $this->user && $this->user['active'];
+		return isset($_SESSION['userid']) && is_numeric($_SESSION['userid']) && $this->_user && $this->_user['active'];
 	}
 	public function log_in($username, $password) {
 		global $db;
@@ -199,9 +199,9 @@ class Auth {
 			WHERE
 				login = {$db->quote($username)}
 				AND active = 1";
-			
+
 		$result = $db->queryAll($sql);
-		
+
 		if( sizeOf( $result ) > 0 ) {
 			$result = $result[0];
 			if( sha1($password) == $result['password'] ) {
@@ -209,7 +209,7 @@ class Auth {
 				$_SESSION['username'] = $result['login'];
 				$_SESSION['userid'] = $result['id'];
 				//log_event('admin', 'EVENT_LOGIN_SUCCESS');
-				$this->user = Auth::get_user($result['id']);
+				$this->_user = Auth::get_user($result['id']);
 			}
 		} else {
 			//log_event('admin', 'EVENT_LOGIN_FAILURE', $username);
@@ -220,12 +220,12 @@ class Auth {
 		if (function_exists('db_session_setup')) db_session_setup();
 		session_start();
 		session_regenerate_id();
-		$this->user = false;
+		$this->_user = false;
 	}
 	public function update_password($password) {
 		global $db;
 		$password = $db->quote(sha1($password));
-		$sql = "UPDATE `{$db->table('users')}` SET `password` = $password, `force_pass_change` = 0 WHERE `id` = {$this->user['id']}";
+		$sql = "UPDATE `{$db->table('users')}` SET `password` = $password, `force_pass_change` = 0 WHERE `id` = {$this->_user['id']}";
 		$db->query($sql);
 	}
 }
