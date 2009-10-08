@@ -38,18 +38,13 @@ var highlighter_url = "{link resource="js/highlighter.php"}";
 	<div class="menu">
 		<ul>
 			<li><div><a href="index.php">Index</a></div></li>
-			{*
-			{foreach name=pages from=$pages item=page}
-				{if $smarty.foreach.pages.index > 0 && (0 == $smarty.foreach.pages.iteration % 5)}
-					</ul>
-					<ul>
-				{/if}
-				<li><div><a href="{link resource="pages/`$page.page_name`"}"{if $active_page && $active_page.page_id eq $page.page_id} id="current"{/if}>{$page.post_title}</a></div></li>
-			{/foreach}
-			*}
+			<li><div><a href="projects.php">Projects</a></div></li>
+			<li><div><a href="pages.php">Pages</a></div></li>
+			<li><div><a href="pages.php">Updates</a></div></li>
 		</ul>
 		<ul>
 			<li><div><a href="{link resource=""}">View Site</a></div></li>
+			<li><div><a href="errors.php">Error Log</a></div></li>
 		</ul>
 		{*
 		<ul>
