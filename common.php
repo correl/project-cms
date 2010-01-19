@@ -45,7 +45,9 @@ Error::set_options(array(
 $db = new Database($config['dsn']);
 $template = new Projects_Smarty();
 
-session_set_cookie_params(1800, WEB_PATH, $_SERVER['HTTP_HOST']);
+if ($_SERVER['HTTP_HOST'] !== 'localhost') {
+	session_set_cookie_params(1800, WEB_PATH, $_SERVER['HTTP_HOST']);
+}
 session_start();
 if (defined('ADMIN') && true === ADMIN) {
 	require_once('includes/auth.php');
