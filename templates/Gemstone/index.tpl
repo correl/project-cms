@@ -29,7 +29,7 @@
 		{/if}
 		{foreach from=$posts item=post}
 			<div class="date">
-				{$post.post_date|date_format:"%A %e of %B, %I:%M %p"}
+				{$post.post_date|date_format:"%A %e of %B, %Y %I:%M %p"}
 			</div>
 			<div class="newsitem">
 				<div class="title">
