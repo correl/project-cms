@@ -21,6 +21,13 @@ postEditor.prototype = {
 				$(this.element).find('textarea').wymeditor();
 		});
 	},
+	"editPost": function(post, project) {
+		project = typeof(project) == "undefined" ? 0 : project;
+		this.element.load(this.url, {"post": post, "project": project}, function() {
+				$(this).dialog("open");
+				$(this.element).find('textarea').wymeditor();
+		});
+	},
 	"save": function() {
 		var form = $(this.element.find("form"));
 		if (form.length == 0) return;

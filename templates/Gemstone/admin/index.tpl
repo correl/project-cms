@@ -7,8 +7,8 @@
 			<a class="ui-widget-content ui-state-default ui-corner-all" href="projects.php">Projects</a>
 		{/if}
 		<a class="ui-widget-content ui-state-default ui-corner-all" href="pages.php">Pages</a>
-		<a class="ui-widget-content ui-state-default ui-corner-all" href="pages.php">Updates</a>
-		
+		<a class="ui-widget-content ui-state-default ui-corner-all" href="posts.php">Updates</a>
+
 		<h2>Users</h2>
 		<a class="ui-widget-content ui-state-default ui-corner-all" href="users.php">Users</a>
 		<a class="ui-widget-content ui-state-default ui-corner-all" href="groups.php">Groups</a>

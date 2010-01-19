@@ -1,7 +1,7 @@
 <?php
 function get_posts($options = false) {
 	global $db;
-	
+
 	if (!is_array($options)) $options = array();
 	$constraints = array('pg.page_id IS NULL');
 	$where_sql = $limit_sql = '';
@@ -42,7 +42,7 @@ function get_posts($options = false) {
 }
 function get_pages($options = false) {
 	global $db;
-	
+
 	if (!is_array($options)) $options = array();
 	$constraints = array();
 	$where_sql = $limit_sql = '';
@@ -91,7 +91,7 @@ function get_pages($options = false) {
 }
 function get_projects($project_id = false) {
 	global $db;
-	
+
 	$sql = "SELECT
 			project_id,
 			project_name,
@@ -113,7 +113,7 @@ function get_projects($project_id = false) {
 }
 function save_post($options) {
 	global $db, $auth, $template;
-	
+
 	if (!isset($options['post_id'])
 		|| !isset($options['user_id'])
 		|| !isset($options['project_id'])
@@ -125,11 +125,11 @@ function save_post($options) {
 	) {
 		throw new Exception('Missing required fields attempting to save post data; Received: ' . var_export($options));
 	}
-	
+
 	if (!$auth->has_perm('post_edit')) {
 		throw new AuthException("Unauthorized attempt to modify post by user: " . var_export($auth->user()));
 	}
-	
+
 	$post_id = intval($options['post_id']);
 	$user_id = intval($options['user_id']);
 	$project_id = intval($options['project_id']);
@@ -140,9 +140,9 @@ function save_post($options) {
 	$post_text = trim($options['post_text']);
 	$post_additional_text_id = intval($options['post_additional_text_id']);
 	$post_additional_text = trim($options['post_additional_text']);
-	
+
 	if ($db->supports('transactions')) $db->beginTransaction();
-	
+
 	try {
 		if ($post_text_id) {
 			$sql = "UPDATE {$db->table('text')} SET text = {$db->quote($post_text)} WHERE text_id = {$db->quote($post_text_id)}";
@@ -219,7 +219,7 @@ function save_post($options) {
 		return false;
 	}
 	if ($db->in_transaction) $db->commit();
-	
+
 	// Clear out the cache so the updated material is immediately visible
 	try {
 		$template->clear_all_cache();
@@ -232,8 +232,8 @@ function save_post($options) {
 		*/
 		Error::log_exception($e);
 	}
-	
-	return $page_id;
+
+	return $post_id;
 }
 function is_vector( &$array ) {
 	$next = 0;
@@ -270,7 +270,7 @@ function json_escape( $string ) {
 
 function json( $array ) {
 	if( !is_array( $array ) ) { return json_escape( $array ); }
-	
+
 	$items = array();
 	if( is_vector( $array ) ) {
 		foreach( $array as $key => $value ) {
