@@ -46,6 +46,7 @@ div.quote {
 
 /* Top & Header */
 .top {
+    display: none;
 	background: url(img/top.gif);
 	color: #FFF;
 	height: 45px;
@@ -59,7 +60,8 @@ div.quote {
 	font: normal 60% Verdana,sans-serif;
 }
 .header {
-	background: url(img/header.gif); 
+    padding-top: 45px;
+    background: url(img/correl.png);
 	height: 101px;
 	width: 939px; 
 }
@@ -146,7 +148,7 @@ div.newsitem .body, div.comments .body {
 div.content_right {
 	width: 331px;
 	position: absolute;
-	top: 116px;
+	top: 147px;
 	left: 620px;
 }
 
