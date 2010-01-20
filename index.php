@@ -91,7 +91,6 @@ if (!$template->is_cached('Gemstone/index.tpl', $cache_id)) {
 			$active_project['project_main_page'] = 0;
 		}
 	}
-	if ($active_page) $active_page = &$posts[0];
 	if ($active_post) $active_post = &$posts[0];
 	if ($active_post) $active_post['comments'] = get_comments($active_post_id);
 	$projects = get_projects();

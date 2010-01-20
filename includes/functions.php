@@ -73,7 +73,8 @@ function get_pages($options = false) {
 			u.name user_name,
 			pr.project_id,
 			pr.project_name,
-			pr.project_short_name
+			pr.project_short_name,
+			COUNT(c.id) num_comments
 		FROM
 			pages pg
 			JOIN {$db->table('posts')} p ON pg.post_id = p.post_id
@@ -81,7 +82,9 @@ function get_pages($options = false) {
 			JOIN {$db->table('users')} u ON p.user_id = u.id
 			JOIN {$db->table('text')} t ON p.post_text = t.text_id
 			LEFT OUTER JOIN {$db->table('text')} at ON p.post_additional_text = at.text_id
+			LEFT OUTER JOIN {$db->table('comments')} c ON p.post_id = c.post_id
 		$where_sql
+		GROUP BY pg.page_id, pg.page_name, p.post_id, p.post_title, p.post_date, t.text_id, t.text, at.text_id, at.text, u.name, pr.project_id, pr.project_name, pr.project_short_name
 		ORDER BY pg.page_name
 		$limit_sql";
 	try {
