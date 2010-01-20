@@ -18,12 +18,12 @@ body.no_sidebar {
 	background: #999 url(img/bg_nosidebar.gif) repeat-y;
 }
 body.no_sidebar .top {
-    display: block;
+	display: block;
 }
 body.no_sidebar .header {
 	background: #444;
 	height: 101px;
-	width: 939px; 
+	width: 939px;
 	padding-top: 0px;
 }
 body.no_sidebar div.content_left {
@@ -75,3 +75,40 @@ div.newsitem .author {
 dt {
 	font-weight: bold;
 }
+
+/* Forms */
+form {
+	text-align: center;
+}
+form fieldset {
+	border: none;
+}
+form dt {
+	float: left;
+	text-align: right;
+	width: 28%;
+	clear: left;
+}
+form dd {
+	text-align: left;
+	margin-bottom: .5em;
+	margin-left: 30%;
+	min-height: 1em;
+	width: 70%;
+}
+dd input[type="text"], dd input[type="password"], dd select {
+	width: 70%;
+}
+form input[type="submit"], form input[type="button"] {
+	width: 30%;
+}
+input, select, textarea {
+	padding: 2px;
+}
+textarea {
+	width: 95%;
+}
+form li {
+	list-style-image: none;
+}
+

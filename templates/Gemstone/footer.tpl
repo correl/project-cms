@@ -25,7 +25,7 @@
 		<div class="title">Links</div>
 		<a href="{link resource="admin/"}">Login</a>
 		<div class="line"><span></span></div>
-		<a href="{link type=feed resource=rss}"><img src="{link resource="templates/Gemstone/img/feed-icon-14x14.png"}"/> RSS Feed</a>
+		<a href="{link type=feed resource=rss}"><img src="{link resource="templates/Gemstone/img/feed-icon-14x14.png"}" alt="RSS" /> RSS Feed</a>
 		{*<a href="{link type=feed resource=atom}"><img src="{link resource="templates/Gemstone/img/feed-icon-14x14.png"}"/> Atom Feed</a>*}
 		{if $active_project}
 			<a href="{link type=feed project=$active_project.project_short_name resource=rss}"><img src="{link resource="templates/Gemstone/img/feed-icon-14x14.png"}"/> RSS Feed ({$active_project.project_short_name|capitalize})</a>

@@ -14,11 +14,12 @@ class Projects_Smarty extends Smarty {
 			$this->debugging = true;
 		}
 		$this->register_function('link', array('Projects_Smarty', '_tpl_link'));
+		$this->register_function('captcha', array('Projects_Smarty', '_recaptcha'), false);
 	}
 	static function _tpl_link($params, &$smarty) {
 		$type = isset($params['type']) ? strtolower($params['type']) : '';
 		if (isset($params['resource'])) $resource = $params['resource']; else return false;
-		
+
 		switch ($type) {
 		case 'project':
 			$link = WEB_PATH . "project/{$resource}/";
@@ -42,7 +43,16 @@ class Projects_Smarty extends Smarty {
 			$link = WEB_PATH . $resource;
 		}
 		if (isset($params['external']) && $params['external']) $link = "http://{$_SERVER['HTTP_HOST']}{$link}";
+		if (isset($params['anchor'])) $link .= "#{$params['anchor']}";
 		return $link;
+	}
+	static function _recaptcha($params, &$smarty) {
+		global $config;
+		$host = $_SERVER['HTTP_HOST'];
+		$public_key = isset($config['recaptcha'][$host]) ? $config['recaptcha'][$host]['public_key'] : '';
+		$error = isset($params['error']) ? $params['error'] : null;
+		if (!$public_key) return null;
+		return recaptcha_get_html($public_key, $error);
 	}
 }
 ?>

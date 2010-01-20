@@ -47,20 +47,61 @@
 					{if $post.additional_text}
 						<a href="{link type=post project=$post.project_short_name resource=$post.post_id}">Read more</a>
 					{/if}
+					<a href="{link type=post project=$post.project_short_name resource=$post.post_id anchor=comments}">{$post.num_comments} Comment(s)</a>
 				{/if}
 				<div class="clearer"><span></span></div>
 			</div>
-		{/foreach}
-		{if $active_post}
-			<div class="comments">
-				<div class="title">Comments</div>
-				<div class="newsitem">
-					<div class="body">
-						Comment #1...
+			{if $active_post}
+				<div class="comments">
+					<a name="comments"></a>
+					<div class="title"> {$post.num_comments} Comment(s)</div>
+					{foreach item=comment from=$post.comments}
+						<div class="newsitem">
+							<div class="body">{$comment.text}</div>
+							<div class="clearer"><span></span></div>
+							<div class="author">
+								<strong>
+									{if $comment.website}
+										<a href="{$comment.website}">{$comment.name}</a>
+									{else}
+										{$comment.name}
+									{/if}
+								</strong>
+								on {$comment.timestamp|date_format:"%A %e of %B, %Y %I:%M %p"}
+							</div>
+						</div>
+					{/foreach}
+					<div class="newsitem">
+						<div class="title">Post a comment</div>
+						<form method="post">
+							<fieldset>
+								<dl>
+									<dt>Name <em>(optional)</em></dt>
+									<dd>
+										<input type="text" name="name" value="{if $captcha_error}{$smarty.post.name}{/if}" />
+									</dd>
+									<dt>Website <em>(optional)</em></dt>
+									<dd>
+										<input type="text" name="website" value="{if $captcha_error}{$smarty.post.website}{/if}" />
+									</dd>
+									<dt>Comment</dt>
+									<dd>
+										<em>HTML is allowed with the following tags: p,b,a[href],i</em>
+										<textarea name="text">{if $captcha_error}{$smarty.post.text}{/if}</textarea>
+									</dd>
+									<dt>Captcha</dt>
+									{if $captcha_error}
+										<dd>{captcha error=$captcha_error}</dd>
+									{else}
+										<dd>{captcha}</dd>
+									{/if}
+								</dl>
+							</fieldset>
+							<input type="submit" name="comment"value="Submit">
+						</form>
 					</div>
-					<div class="clearer"><span></span></div>
 				</div>
-			</div>
-		{/if}
+			{/if}
+		{/foreach}
 	{/if}
 {include file="Gemstone/footer.tpl"}

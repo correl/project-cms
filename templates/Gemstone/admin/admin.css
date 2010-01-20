@@ -40,7 +40,6 @@ input, select, textarea {
 	padding: 2px;
 }
 textarea {
-	width: 95%;
 	height: 20em;
 }
 form li {

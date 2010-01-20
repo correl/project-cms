@@ -6,6 +6,17 @@ CREATE TABLE`acl` (
 	PRIMARY KEY  (`id`)
 );
 
+CREATE TABLE `comments` (
+	`id` int(10) unsigned NOT NULL auto_increment,
+	`post_id` int(10) unsigned NOT NULL,
+	`name` varchar(80) DEFAULT NULL,
+	`website` varchar(255) DEFAULT NULL,
+	`ip_address` varchar(128) NOT NULL,
+	`comment` text NOT NULL,
+	`timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`id`)
+);
+
 CREATE TABLE `errors` (
 	`id` int(10) unsigned NOT NULL auto_increment,
 	`caught` tinyint(3) unsigned NOT NULL DEFAULT 0,

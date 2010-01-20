@@ -15,6 +15,7 @@ require_once('includes/error.php');
 require_once('includes/functions.php');
 require_once('includes/templates.php');
 require_once('includes/database.php');
+require_once('includes/recaptchalib.php');
 
 if (get_magic_quotes_gpc()) {
 	function stripslashes_deep($value) {

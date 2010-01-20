@@ -21,7 +21,8 @@ function get_posts($options = false) {
 			u.name user_name,
 			pr.project_id,
 			pr.project_name,
-			pr.project_short_name
+			pr.project_short_name,
+			COUNT(c.id) num_comments
 		FROM
 			posts p
 			LEFT OUTER JOIN {$db->table('projects')} pr ON p.project_id = pr.project_id
@@ -29,7 +30,9 @@ function get_posts($options = false) {
 			JOIN {$db->table('text')} t ON p.post_text = t.text_id
 			LEFT OUTER JOIN {$db->table('text')} at ON p.post_additional_text = at.text_id
 			LEFT OUTER JOIN {$db->table('pages')} pg ON p.post_id = pg.post_id
+			LEFT OUTER JOIN {$db->table('comments')} c ON p.post_id = c.post_id
 		$where_sql
+		GROUP BY p.post_id, p.post_title, t.text, at.text, u.name, pr.project_name
 		ORDER BY p.post_date DESC
 		$limit_sql";
 	try {
@@ -88,6 +91,28 @@ function get_pages($options = false) {
 		$pages = array();
 	}
 	return $pages;
+}
+function get_comments($post_id) {
+	global $db;
+
+	$sql = "SELECT
+			id,
+			name,
+			website,
+			ip_address,
+			timestamp,
+			comment text
+		FROM
+			{$db->table('comments')}
+		WHERE
+			post_id = {$post_id}";
+	try {
+		$comments = $db->queryAll($sql);
+	} catch (Exception $e) {
+		Error::log_exception($e);
+		$comments = array();
+	}
+	return $comments;
 }
 function get_projects($project_id = false) {
 	global $db;
@@ -234,6 +259,65 @@ function save_post($options) {
 	}
 
 	return $post_id;
+}
+function save_comment($options) {
+	global $db, $auth, $template;
+
+	if (!isset($options['post_id'])
+		|| !isset($options['text'])
+	) {
+		throw new Exception('Missing required fields attempting to save comment data; Received: ' . var_export($options));
+	}
+	$post_id = intval($options['post_id']);
+	$commenter_name = isset($options['name']) ? trim($options['name']) : '';
+	$commenter_name = !empty($commenter_name) ? $commenter_name : 'Anonymous';
+	$commenter_site = isset($options['website']) ? trim($options['website']) : '';
+	$commenter_ip = get_client_ip();
+	$comment = trim($options['text']);
+
+	if (!empty($commenter_site)) {
+		if (0 !== strpos($commenter_site, 'http://')
+			|| 0 !== strpos($commenter_site, 'https://')
+		) {
+			$commenter_site = "http://{$commenter_site}";
+		}
+	}
+
+	$sql = "INSERT INTO {$db->table('comments')} (post_id, name, website, ip_address, comment)
+		VALUES (
+			{$db->quote($post_id)},
+			{$db->quote($commenter_name)},
+			{$db->quote($commenter_site)},
+			{$db->quote($commenter_ip)},
+			{$db->quote($comment)}
+		)";
+	try {
+		$db->query($sql);
+	} catch (Exception $e) {
+		Error::log_exception($e);
+	}
+}
+function get_client_ip() {
+	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+		$ip = $_SERVER['HTTP_CLIENT_IP'];
+	} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	} else {
+		$ip = $_SERVER['REMOTE_ADDR'];
+	}
+	return $ip;
+}
+function purify_html($html) {
+	global $config;
+	require_once('includes/htmlpurifier-4.0.0-standalone/HTMLPurifier.standalone.php');
+	$cfg = HTMLPurifier_Config::createDefault();
+	if (isset($config['htmlpurifier']) && is_array($config['htmlpurifier'])) {
+		foreach ($config['htmlpurifier'] as $k => $v) {
+			$cfg->set($k, $v);
+		}
+	}
+	$purifier = new HTMLPurifier($cfg);
+	return $purifier->purify($html);
 }
 function is_vector( &$array ) {
 	$next = 0;

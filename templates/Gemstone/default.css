@@ -46,7 +46,7 @@ div.quote {
 
 /* Top & Header */
 .top {
-    display: none;
+	display: none;
 	background: url(img/top.gif);
 	color: #FFF;
 	height: 45px;
@@ -60,10 +60,10 @@ div.quote {
 	font: normal 60% Verdana,sans-serif;
 }
 .header {
-    padding-top: 45px;
-    background: url(img/correl.png);
+	padding-top: 45px;
+	background: url(img/correl.png);
 	height: 101px;
-	width: 939px; 
+	width: 939px;
 }
 
 
@@ -122,9 +122,11 @@ div.box {
 }
 div.newsitem img {
 	border: 3px double #CCC;
-	height: 120px;
 	margin: 6px 10px 10px 10px;
+/*
+	height: 120px;
 	width: 120px;
+*/
 }
 div.newsitem img.left {
 	float: left;
