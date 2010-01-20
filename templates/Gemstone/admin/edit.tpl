@@ -1,4 +1,11 @@
 {* include file="Gemstone/admin/header.tpl" *}
+	<script type="text/javascript" src="{link resource="js/tiny_mce/jquery.tinymce.js"}"></script>
+	<script type="text/javascript">
+	editor.tinymceopts.script_url = '{link resource="js/tiny_mce/tiny_mce.js"}';
+	editor.tinymceopts.content_css = '{link resource="templates/Gemstone/extra.css"}';
+	</script>
+
+
 	<h1>
 		{if $page}
 			{if $post.post_id}Editing page{else}New page{/if}
@@ -6,7 +13,7 @@
 			{if $post.post_id}Editing post{else}New post{/if}
 		{/if}
 	</h1>
-	<form method="POST">
+	<form class="editor" method="POST">
 		<input type="hidden" name="post_id" value="{$post.post_id}" />
 		<fieldset>
 			<dl>
@@ -18,7 +25,7 @@
 						{if isset($errors.page_name)}{include file="Gemstone/admin/error.tpl" error=$errors.page_name}{/if}
 					</dd>
 				{/if}
-				
+
 				<dt>Author</dt>
 				<dd>
 					{if $auth->has_perm('proxy_all')}
@@ -29,7 +36,7 @@
 						{$auth->user('name')}
 					{/if}
 				</dd>
-				
+
 				<dt>Project</dt>
 				<dd>
 					<select name="project_id">
@@ -37,7 +44,7 @@
 						{html_options options=$projects selected=$post.project_id}
 					</select>
 				</dd>
-				
+
 				<dt>Post title</dt>
 				<dd>
 					<input type="text" name="post_title" value="{$post.post_title}" />
@@ -49,7 +56,7 @@
 					<textarea name="post_text">{$post.text}</textarea>
 					{if isset($errors.post_text)}{include file="Gemstone/admin/error.tpl" error=$errors.post_text}{/if}
 				</dd>
-				
+
 				{* TODO: DHTML to show / hide & clear additional text area *}
 				<dt>Additional text</dt>
 				<dd>

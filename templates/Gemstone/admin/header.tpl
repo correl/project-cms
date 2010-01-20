@@ -15,7 +15,6 @@
 <script type="text/javascript" src="{link resource="js/jquery-1.3.2.min.js"}"></script>
 <script type="text/javascript" src="{link resource="js/jquery-ui-1.7.2.custom.min.js"}"></script>
 <script type="text/javascript" src="{link resource="js/shadowbox-build-3.0b/shadowbox.js"}"></script>
-<script type="text/javascript" src="{link resource="js/wymeditor/jquery.wymeditor.min.js"}"></script>
 <script type="text/javascript">
 var highlighter_url = "{link resource="js/highlighter.php"}";
 {literal}

@@ -10,7 +10,7 @@
 	border-bottom: 1px solid black;
 	margin-bottom: 1em;
 }
-
+/*
 form {
 	text-align: center;
 }
@@ -44,4 +44,12 @@ textarea {
 }
 form li {
 	list-style-image: none;
+}
+*/
+form.editor dt {
+	width: 13%;
+}
+form.editor dd {
+	margin-left: 15%;
+	width: 85%;
 }
