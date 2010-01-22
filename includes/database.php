@@ -1,15 +1,21 @@
 <?php
 require_once('MDB2.php');
 
+/**
+* Database utility class that sits on top of PEAR MDB2
+*/
 class Database {
 	private $_dsn;
 	private $_mdb2;
 	private $_table_prefix;
 	private $_tables = array();
-	
+
 	public function __construct($dsn) {
 		$this->_dsn = $dsn;
 	}
+	/**
+	* Returns the database connection object, creating it if it does not yet exist
+	*/
 	public function connection() {
 		if (!$this->_mdb2) {
 			$this->_mdb2 =& MDB2::factory($this->_dsn);
@@ -22,10 +28,18 @@ class Database {
 		if ($prefix) $this->_table_prefix = $prefix;
 		return $this->_table_prefix;
 	}
+	/**
+	* Sets the table mappings to the supplied array if one is given
+	*
+	* @return array table mappings
+	*/
 	public function tables($tables = false) {
 		if (is_array($tables)) $this->_tables = $tables;
 		return $this->_tables;
 	}
+	/**
+	* Looks up the supplied table name and applies the table prefix, if any
+	*/
 	public function table($table) {
 		$table = strtolower($table);
 		$mapped_table = $table;

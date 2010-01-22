@@ -1,4 +1,9 @@
 <?php
+/**
+* Generates a news feed using either all updates, or updates pertaining to a particular project
+*
+* Templates are available for generating both RSS and ATOM feeds
+*/
 require_once('common.php');
 
 $date_rfc2822 = 'D, d M Y H:i:s O';

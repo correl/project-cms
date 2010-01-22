@@ -18,6 +18,8 @@ require_once('includes/database.php');
 require_once('includes/recaptchalib.php');
 
 if (get_magic_quotes_gpc()) {
+	// If magic quotes are enabled, strip them out!
+
 	function stripslashes_deep($value) {
 		$value = is_array($value) ?
 			array_map('stripslashes_deep', $value) :
@@ -47,6 +49,7 @@ $db = new Database($config['dsn']);
 $template = new Projects_Smarty();
 
 if ($_SERVER['HTTP_HOST'] !== 'localhost') {
+	// Setting the cookie domain to 'localhost' will not work as localhost is a first level domain
 	session_set_cookie_params(1800, WEB_PATH, $_SERVER['HTTP_HOST']);
 }
 session_start();
@@ -55,11 +58,14 @@ if (defined('ADMIN') && true === ADMIN) {
 	if( isset($_GET['logout'] ) ) $auth->log_out();
 	if (!$auth->ok() && basename($_SERVER['SCRIPT_NAME']) != 'login.php')
 	{
+		// User is not logged in, redirect to the login page
 		header('Location: login.php');
 		exit;
 	}
 	/*
 	if ($auth->ok() && $auth->user('force_pass_change') && basename($_SERVER['SCRIPT_NAME']) != 'password.php') {
+		// User is logged in, but must change their password before proceeding
+		// Redirect to the password change page
 		header('Location: password.php');
 		exit;
 	}

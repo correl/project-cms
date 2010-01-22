@@ -1,4 +1,13 @@
 <?php
+/**
+* User authentication utility class
+*
+* Handles user logins and manages groups and permissions
+* Permissions are currently assigned to groups.  Users may be members of muliple groups
+* Permissions are defined as YES, NO or NEVER. A user's composite permission table is decided
+*	by evaluating all available group permissions. A YES will take precedence over a NO, and a NEVER
+*	takes precedence over all. Defaults to NO if a permission is not linked to any associated group.
+*/
 class Auth {
 	private $_acl;
 	private $_user;
@@ -9,6 +18,9 @@ class Auth {
 		$id = isset($_SESSION['userid']) && is_numeric($_SESSION['userid']) ? $_SESSION['userid'] : false;
 		$this->_user = $id ? Auth::get_user($id) : false;
 	}
+	/**
+	* Returns all information about the current user, or just one field if a key is specified
+	*/
 	public function user($key = false) {
 		if ($key) {
 			return is_array($this->_user) && array_key_exists($key, $this->_user) ? $this->_user[$key] : false;
@@ -16,22 +28,34 @@ class Auth {
 			return $this->_user;
 		}
 	}
+	/**
+	* Returns a list of all users in the database, active users first
+	*/
 	public static function get_users() {
 		global $db;
 		$sql = "SELECT * FROM {$db->table('users')} ORDER BY active DESC, id";
 		return $db->queryAll($sql);
 	}
+	/**
+	* Returns an associative array of users in the form user_id => user_name
+	*/
 	public static function get_user_names($include_inactive = false) {
 		global $db;
 		$where = !$include_inactive ? 'WHERE active = 1' : '';
 		$sql = "SELECT id, login FROM {$db->table('users')} $where ORDER BY name DESC";
 		return $db->extended->getAssoc($sql);
 	}
+	/**
+	* Returns a list of all groups in the database ordered by name
+	*/
 	public static function get_groups() {
 		global $db;
 		$sql = "SELECT * FROM {$db->table('groups')} ORDER BY name";
 		return $db->queryAll($sql);
 	}
+	/**
+	* Returns all information on the specified user
+	*/
 	public static function get_user($id) {
 		global $db;
 		$id = intval($id);
@@ -69,6 +93,11 @@ class Auth {
 		$proxies = $this->proxy_users();
 		return in_array($proxy_id, array_keys($proxies));
 	}
+	/**
+	* Checks to see if the user has the specified permission
+	* If a user_id is specified, permissions will be looked up for that user, otherwise
+	* the current user will be checked
+	*/
 	public function has_perm($permission, $user_id = false) {
 		$cache = ($user_id === false);
 		$user_id = (false === $user_id && $this->_user ? $this->_user['id'] : $user_id);
@@ -81,6 +110,9 @@ class Auth {
 		}
 		return array_key_exists($permission, $this->_acl) ? ('YES' == $this->_acl[$permission]) : false;
 	}
+	/**
+	* Gets the composite permissions table for the specified user
+	*/
 	public static function get_user_permissions($user_id) {
 		global $db;
 
@@ -115,6 +147,9 @@ class Auth {
 		}
 		return $permissions;
 	}
+	/**
+	* Returns a list of all permissions linked to the specified group
+	*/
 	public static function get_group_permissions($group_id) {
 		global $db;
 		// Get the full list of permissions from the database
@@ -139,6 +174,12 @@ class Auth {
 		}
 		return $permissions;
 	}
+	/**
+	* Updates the level of the specified permission for the specified group
+	*
+	* $permission may be the permission_id or the permission name
+	* $access must be 'YES', 'NO' or 'NEVER'
+	*/
 	public static function update_acl($group, $permission, $access) {
 		global $db;
 		if (is_string($permission)) {
@@ -156,6 +197,12 @@ class Auth {
 		}
 		$db->query($sql);
 	}
+	/**
+	* Resets a user's password
+	*
+	* A new, random password is emailed to the user. The user must log in with this new
+	* password, and will be required to change their password immediately.
+	*/
 	public static function reset_password($user, $subject = null, $message = null) {
 		global $db;
 		if (!$subject) $subject = l('email_reset_password_subject');
@@ -180,6 +227,9 @@ class Auth {
 		mail($user['email'], $subject, $message);
 		return true;
 	}
+	/**
+	* Deactivates a user account
+	*/
 	public static function deactivate($user) {
 		global $db;
 		$user = intval($user);
@@ -188,9 +238,17 @@ class Auth {
 		$db->query($sql);
 		return true;
 	}
+	/**
+	* Check to see if the user is logged in
+	*/
 	public function ok() {
 		return isset($_SESSION['userid']) && is_numeric($_SESSION['userid']) && $this->_user && $this->_user['active'];
 	}
+	/**
+	* Attempt to log in using the specified username and password
+	*
+	* Check for success using Auth::ok()
+	*/
 	public function log_in($username, $password) {
 		global $db;
 
@@ -215,6 +273,9 @@ class Auth {
 			//log_event('admin', 'EVENT_LOGIN_FAILURE', $username);
 		}
 	}
+	/**
+	* Logs out the current user and destroys / recreates the session
+	*/
 	public function log_out() {
 		session_destroy();
 		if (function_exists('db_session_setup')) db_session_setup();
@@ -222,6 +283,9 @@ class Auth {
 		session_regenerate_id();
 		$this->_user = false;
 	}
+	/**
+	* Updates a user's password
+	*/
 	public function update_password($password) {
 		global $db;
 		$password = $db->quote(sha1($password));

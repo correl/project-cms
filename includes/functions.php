@@ -300,6 +300,9 @@ function save_comment($options) {
 		Error::log_exception($e);
 	}
 }
+/**
+* Attempt to get the client's real IP address by checking various possible sources.
+*/
 function get_client_ip() {
 	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
 		$ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -310,6 +313,9 @@ function get_client_ip() {
 	}
 	return $ip;
 }
+/**
+* Run HTMLPurifier on the supplied HTML using the options defined in the application configuration file
+*/
 function purify_html($html) {
 	global $config;
 	require_once('includes/htmlpurifier-4.0.0-standalone/HTMLPurifier.standalone.php');
@@ -322,6 +328,13 @@ function purify_html($html) {
 	$purifier = new HTMLPurifier($cfg);
 	return $purifier->purify($html);
 }
+
+/*
+	The following functions convert PHP variables into JSON objects to be used in ajax calls
+	TODO: PHP now has a json module, which may or may not be present. Check for it and only provide
+		the json function if it is not present.
+*/
+
 function is_vector( &$array ) {
 	$next = 0;
 	foreach( $array as $k=>$v ) {
