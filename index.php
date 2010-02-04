@@ -73,7 +73,11 @@ if (isset($_POST['comment'])) {
 			'text' => $text
 		));
 		try {
+			// Clear the cache for the post being commented on, as well as the index
+			// pages it appears on so the comment count is updated properly.
 			$template->clear_cache('Gemstone/index.tpl', $cache_id);
+			$template->clear_cache('Gemstone/index.tpl', "{$active_project_id}:0:0");
+			$template->clear_cache('Gemstone/index.tpl', '0:0:0');
 		} catch (Exception $e) {
 			Error::log_exception($e);
 		}
