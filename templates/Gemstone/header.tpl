@@ -32,7 +32,7 @@ var highlighter_url = "{link resource="js/highlighter.php"}";
 </script>
 <title>correl.phoenixinquis.net{if $active_project}: {$active_project.project_name}{/if}</title>
 </head>
-<body{if isset($error) && true === $error} class="no_sidebar"}{/if}>
+<body{if isset($error) && true === $error} class="no_sidebar"{/if}>
 <div class="top"><h1>correl.phoenixinquis.net<span>Projects and coding adventures</span></h1></div>
 <div class="header">
 	<div class="menu horizontal">

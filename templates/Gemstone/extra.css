@@ -17,15 +17,6 @@ div.menu.horizontal a {
 body.no_sidebar {
 	background: #999 url(img/bg_nosidebar.gif) repeat-y;
 }
-body.no_sidebar .top {
-	display: block;
-}
-body.no_sidebar .header {
-	background: #444;
-	height: 101px;
-	width: 939px;
-	padding-top: 0px;
-}
 body.no_sidebar div.content_left {
 	width: 937px;
 }
